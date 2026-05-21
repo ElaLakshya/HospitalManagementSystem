@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% block title %}Book Appointment — Manipal Hospital{% endblock %}
+
+{% block content %}
+<div class="main-content">
+  <div class="page-title-bar">
+    <h1>➕ Book an Appointment</h1>
+    <p>Choose your department, doctor, and preferred date</p>
+  </div>
+
+  <div class="card" style="max-width:560px;">
+    <form method="POST">
+      <div class="form-group">
+        <label>Department</label>
+        <select class="form-control" name="department_id" id="deptSelect"
+                onchange="filterDoctors()" required>
+          <option value="">-- Select Department --</option>
+          {% for d in departments %}
+          <option value="{{ d.id }}">{{ d.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Doctor</label>
+        <select class="form-control" name="doctor_id" id="docSelect" required>
+          <option value="">-- Select Department First --</option>
+          {% for d in doctors %}
+          <option value="{{ d.id }}" data-dept="{{ d.department_id }}" class="doc-opt" style="display:none;">
+            Dr. {{ d.name }}{% if d.specialization %} — {{ d.specialization }}{% endif %}
+          </option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Preferred Date</label>
+        <input class="form-control" type="date" name="date"
+               min="{{ ti.date }}" required>
+      </div>
+
+      <div class="form-group">
+        <label>Reason / Notes (optional)</label>
+        <textarea class="form-control" name="notes" rows="3"
+                  placeholder="Briefly describe your reason for visit..."></textarea>
+      </div>
+
+      <div style="display:flex;gap:12px;margin-top:8px;">
+        <button type="submit" class="btn btn-primary" style="flex:1;padding:13px;">
+          Confirm Appointment
+        </button>
+        <a href="{{ url_for('patient_dashboard') }}" class="btn btn-outline">Cancel</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function filterDoctors() {
+  const deptId = document.getElementById('deptSelect').value;
+  const opts   = document.querySelectorAll('.doc-opt');
+  const sel    = document.getElementById('docSelect');
+  sel.innerHTML = '<option value="">-- Select Doctor --</option>';
+  opts.forEach(o => {
+    if (o.dataset.dept === deptId) {
+      const clone = o.cloneNode(true);
+      clone.style.display = '';
+      sel.appendChild(clone);
+    }
+  });
+}
+</script>
+{% endblock %}

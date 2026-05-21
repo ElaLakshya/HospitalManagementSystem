@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+{% block title %}Sign Up — Manipal Hospital{% endblock %}
+
+{% block content %}
+<div class="auth-page" style="align-items:flex-start;padding-top:48px;">
+  <div class="auth-box" style="max-width:580px;">
+    <h2>Create Account</h2>
+    <p class="auth-sub">Register as a Doctor or Patient at Manipal Hospital</p>
+
+    <form method="POST">
+      <!-- User type toggle -->
+      <div class="type-toggle">
+        <button type="button" class="type-btn active" id="btnDoc"
+                onclick="setType('doctor')">🩺 Doctor</button>
+        <button type="button" class="type-btn"        id="btnPat"
+                onclick="setType('patient')">🧑‍⚕️ Patient</button>
+      </div>
+      <input type="hidden" name="user_type" id="userTypeInput" value="doctor">
+
+      <!-- Common fields -->
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Full Name</label>
+          <input class="form-control" type="text" name="name"
+                 placeholder="Dr. / Your full name" required>
+        </div>
+        <div class="form-group">
+          <label>Phone Number</label>
+          <input class="form-control" type="tel" name="phone"
+                 placeholder="+91 9XXXXXXXXX">
+        </div>
+        <div class="form-group">
+          <label>Email Address</label>
+          <input class="form-control" type="email" name="email"
+                 placeholder="you@email.com" required>
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input class="form-control" type="password" name="password"
+                 placeholder="Min. 8 characters" required>
+        </div>
+      </div>
+
+      <!-- DOCTOR fields -->
+      <div class="dynamic-fields active" id="doctorFields">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Department</label>
+            <select class="form-control" name="department_id">
+              <option value="">-- Select Department --</option>
+              {% for d in departments %}
+              <option value="{{ d.id }}">{{ d.name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Specialization</label>
+            <input class="form-control" type="text" name="specialization"
+                   placeholder="e.g. Interventional Cardiology">
+          </div>
+        </div>
+      </div>
+
+      <!-- PATIENT fields -->
+      <div class="dynamic-fields" id="patientFields">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Date of Birth</label>
+            <input class="form-control" type="date" name="dob">
+          </div>
+          <div class="form-group">
+            <label>Blood Group</label>
+            <select class="form-control" name="blood_group">
+              <option value="">-- Select --</option>
+              {% for bg in ['A+','A-','B+','B-','AB+','AB-','O+','O-'] %}
+              <option>{{ bg }}</option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary"
+              style="width:100%;margin-top:12px;padding:13px;">
+        Create Account
+      </button>
+    </form>
+
+    <p style="text-align:center;margin-top:20px;font-size:.85rem;color:var(--text-mid);">
+      Already have an account?
+      <a href="{{ url_for('login') }}" style="color:var(--accent-dark);font-weight:600;">Login</a>
+    </p>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function setType(t) {
+  document.getElementById('userTypeInput').value = t;
+  document.getElementById('btnDoc').classList.toggle('active', t==='doctor');
+  document.getElementById('btnPat').classList.toggle('active', t==='patient');
+  document.getElementById('doctorFields').classList.toggle('active', t==='doctor');
+  document.getElementById('patientFields').classList.toggle('active', t==='patient');
+}
+</script>
+{% endblock %}

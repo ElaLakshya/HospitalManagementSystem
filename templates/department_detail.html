@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% block title %}{{ dept.name if dept else 'Department' }} — Manipal Hospital{% endblock %}
+
+{% block content %}
+<div class="main-content">
+  {% if dept %}
+  <div style="margin-bottom:12px;">
+    <a href="{{ url_for('departments') }}"
+       style="color:var(--accent-dark);font-size:.85rem;">← Back to All Departments</a>
+  </div>
+
+  <div style="background:linear-gradient(135deg,var(--primary) 0%,var(--primary-light) 100%);
+              border-radius:var(--radius);padding:32px;color:#fff;margin-bottom:28px;">
+    <h1 style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;">
+      {{ dept.name }}
+    </h1>
+    <p style="color:rgba(255,255,255,.75);margin-top:8px;">{{ dept.description }}</p>
+    <div style="display:flex;gap:20px;margin-top:16px;flex-wrap:wrap;font-size:.85rem;color:rgba(255,255,255,.7);">
+      <span>📍 {{ dept.floor or 'TBD' }}</span>
+      <span>☎️ Extension: {{ dept.phone_ext or 'N/A' }}</span>
+      <span>👨‍⚕️ {{ doctors|length }} Doctor{{ 's' if doctors|length != 1 else '' }}</span>
+    </div>
+  </div>
+
+  <div class="page-title-bar"><h1>Doctors in {{ dept.name }}</h1></div>
+
+  {% if doctors %}
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px;">
+    {% for doc in doctors %}
+    <div class="card" style="display:flex;gap:16px;align-items:center;">
+      <div style="width:54px;height:54px;border-radius:50%;
+                  background:var(--bg);border:2px solid var(--border);
+                  display:flex;align-items:center;justify-content:center;
+                  font-size:1.4rem;flex-shrink:0;">🩺</div>
+      <div>
+        <div style="font-weight:700;color:var(--primary);">Dr. {{ doc.name }}</div>
+        <div style="font-size:.8rem;color:var(--text-mid);margin-top:2px;">
+          {{ doc.specialization or 'General Practitioner' }}
+        </div>
+        {% if doc.email %}
+        <div style="font-size:.77rem;color:var(--text-soft);margin-top:4px;">
+          📧 {{ doc.email }}
+        </div>
+        {% endif %}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="card">
+    <div class="empty-state">
+      <div class="empty-icon">👨‍⚕️</div>
+      <h3>No Doctors Registered Yet</h3>
+      <p>Doctors who sign up under this department will appear here.</p>
+    </div>
+  </div>
+  {% endif %}
+  {% endif %}
+</div>
+{% endblock %}
+

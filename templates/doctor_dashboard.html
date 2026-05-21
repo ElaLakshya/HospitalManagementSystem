@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% block title %}Doctor Dashboard — Manipal Hospital{% endblock %}
+
+{% block content %}
+<div class="main-content">
+
+  <!-- Welcome Banner -->
+  {% if doc %}
+  <div class="doc-profile">
+    <div class="doc-avatar">🩺</div>
+    <div class="doc-info">
+      <div class="doc-name">Dr. {{ doc.name }}</div>
+      <div class="doc-role">{{ doc.specialization or 'Physician' }} &nbsp;·&nbsp; {{ doc.dept_name or 'General' }}</div>
+      <div class="doc-tags">
+        <span class="doc-tag">📧 {{ doc.email }}</span>
+        {% if doc.phone %}<span class="doc-tag">📞 {{ doc.phone }}</span>{% endif %}
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- Stats -->
+  <div class="stat-grid">
+    <div class="stat-card accent-card">
+      <div class="stat-icon">📅</div>
+      <div class="stat-value">{{ upcoming }}</div>
+      <div class="stat-label">Upcoming Appointments</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">💊</div>
+      <div class="stat-value">{{ med_count }}</div>
+      <div class="stat-label">Medicines Issued</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">🏥</div>
+      <div class="stat-value">{{ doc.dept_name if doc else '—' }}</div>
+      <div class="stat-label">Department</div>
+    </div>
+  </div>
+
+  <!-- Quick Links -->
+  <div class="page-title-bar">
+    <h1>Quick Actions</h1>
+  </div>
+  <div class="action-grid">
+    <a href="{{ url_for('doctor_schedule') }}" class="action-card">
+      <div class="action-icon">📅</div>
+      <div class="action-title">My Schedule</div>
+      <div class="action-desc">View your monthly appointment calendar</div>
+    </a>
+    <a href="{{ url_for('departments') }}" class="action-card">
+      <div class="action-icon">🏥</div>
+      <div class="action-title">Departments</div>
+      <div class="action-desc">Browse all hospital departments</div>
+    </a>
+    <a href="{{ url_for('doctor_medicines') }}" class="action-card">
+      <div class="action-icon">💊</div>
+      <div class="action-title">Medicines</div>
+      <div class="action-desc">Track medicines issued to patients</div>
+    </a>
+  </div>
+
+</div>
+{% endblock %}

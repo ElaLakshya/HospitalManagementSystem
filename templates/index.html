@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manipal Hospital — Home</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="home-page">
+  <div class="home-bg-pattern"></div>
+
+  <!-- HOSPITAL TITLE -->
+  <header class="home-header">
+    <span class="home-cross">✚  ✚  ✚</span>
+    <h1 class="home-hospital-name">Manipal Hospital</h1>
+    <p class="home-tagline">Excellence in Healthcare &nbsp;|&nbsp; Compassion in Every Step</p>
+  </header>
+
+  <!-- LIVE DATE / TIME / DAY -->
+  <div class="home-datetime-bar">
+    <div class="home-dt-item">
+      <div class="dt-value" id="homeTime">--:--</div>
+      <div class="dt-label">Time</div>
+    </div>
+    <div class="home-dt-sep">|</div>
+    <div class="home-dt-item">
+      <div class="dt-value" id="homeDate">-- --- ----</div>
+      <div class="dt-label">Date</div>
+    </div>
+    <div class="home-dt-sep">|</div>
+    <div class="home-dt-item">
+      <div class="dt-value" id="homeDay">------</div>
+      <div class="dt-label">Day</div>
+    </div>
+  </div>
+
+  <!-- AUTH CARD -->
+  <div class="home-body">
+    <div class="home-auth-card">
+      <h2 class="home-auth-title">Welcome</h2>
+      <p class="home-auth-sub">Please select an option to continue</p>
+
+      <a href="{{ url_for('login') }}"  class="home-btn home-btn-primary">🔐 Login to Your Account</a>
+      <a href="{{ url_for('signup') }}" class="home-btn home-btn-secondary">📝 Create New Account</a>
+
+      <div class="home-divider">or</div>
+
+      <a href="{{ url_for('guest') }}" class="home-btn home-btn-ghost">
+        👀 Continue as Guest (Browse Only)
+      </a>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-item">
+      <span class="footer-icon">📞</span>
+      <span>Customer Care: <strong>9800098000</strong></span>
+    </div>
+    <div class="footer-item">
+      <span class="footer-icon">✉</span>
+      <span><strong>manipalcare@gmail.com</strong></span>
+    </div>
+  </footer>
+
+  <script>
+    function tick() {
+      const now   = new Date();
+      const hh    = String(now.getHours()).padStart(2,'0');
+      const mm    = String(now.getMinutes()).padStart(2,'0');
+      const days  = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+      const months= ['January','February','March','April','May','June',
+                     'July','August','September','October','November','December'];
+      document.getElementById('homeTime').textContent = `${hh}:${mm}`;
+      document.getElementById('homeDate').textContent =
+        `${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
+      document.getElementById('homeDay').textContent  = days[now.getDay()];
+    }
+    tick(); setInterval(tick, 1000);
+  </script>
+</body>
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Manipal Hospital{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<!-- ── TOP NAV ───────────────────────────────────────────── -->
+<nav class="top-nav">
+  <div class="nav-brand">
+    <a href="/" class="hosp-name">✚ Manipal Hospital</a>
+    <span class="nav-datetime" id="liveClock"></span>
+  </div>
+  <div class="nav-links">
+    <a href="{{ url_for('departments') }}"
+       class="{{ 'active' if request.endpoint == 'departments' or request.endpoint == 'department_detail' }}">
+      🏥 Departments
+    </a>
+
+    {% if session.get('user_type') == 'doctor' %}
+      <div class="nav-divider"></div>
+      <a href="{{ url_for('doctor_dashboard') }}"
+         class="{{ 'active' if request.endpoint == 'doctor_dashboard' }}">Dashboard</a>
+      <a href="{{ url_for('doctor_schedule') }}"
+         class="{{ 'active' if request.endpoint == 'doctor_schedule' }}">📅 Schedule</a>
+      <a href="{{ url_for('doctor_medicines') }}"
+         class="{{ 'active' if request.endpoint == 'doctor_medicines' or request.endpoint == 'add_medicine' }}">💊 Medicines</a>
+      <div class="nav-divider"></div>
+      <a href="{{ url_for('logout') }}" class="btn-logout">Logout</a>
+
+    {% elif session.get('user_type') == 'patient' %}
+      <div class="nav-divider"></div>
+      <a href="{{ url_for('patient_dashboard') }}"
+         class="{{ 'active' if request.endpoint == 'patient_dashboard' }}">Dashboard</a>
+      <a href="{{ url_for('patient_appointments') }}"
+         class="{{ 'active' if request.endpoint == 'patient_appointments' }}">📋 Appointments</a>
+      <a href="{{ url_for('make_appointment') }}"
+         class="{{ 'active' if request.endpoint == 'make_appointment' }}">➕ Book</a>
+      <div class="nav-divider"></div>
+      <a href="{{ url_for('logout') }}" class="btn-logout">Logout</a>
+
+    {% elif session.get('user_type') == 'guest' %}
+      <div class="nav-divider"></div>
+      <span style="color:rgba(255,255,255,.5);font-size:.8rem;">Browsing as Guest</span>
+      <a href="{{ url_for('login') }}" class="btn-outline btn-sm">Login</a>
+
+    {% else %}
+      <div class="nav-divider"></div>
+      <a href="{{ url_for('login') }}">Login</a>
+      <a href="{{ url_for('signup') }}">Sign Up</a>
+    {% endif %}
+  </div>
+</nav>
+
+<!-- ── FLASH MESSAGES ──────────────────────────────────────── -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div class="flash-container">
+      {% for cat, msg in messages %}
+        <div class="flash {{ cat }}">
+          {% if cat == 'success' %}✅{% elif cat == 'error' %}❌{% else %}ℹ️{% endif %}
+          {{ msg }}
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
+
+<!-- ── PAGE CONTENT ──────────────────────────────────────── -->
+{% block content %}{% endblock %}
+
+<!-- ── FOOTER ────────────────────────────────────────────── -->
+<footer class="footer">
+  <div class="footer-item">
+    <span class="footer-icon">📞</span>
+    <span>Customer Care: <strong>9800098000</strong></span>
+  </div>
+  <div class="footer-item">
+    <span class="footer-icon">✉</span>
+    <span><strong>manipalcare@gmail.com</strong></span>
+  </div>
+</footer>
+
+<!-- ── LIVE CLOCK ─────────────────────────────────────────── -->
+<script>
+  function updateClock() {
+    const now  = new Date();
+    const hh   = String(now.getHours()).padStart(2,'0');
+    const mm   = String(now.getMinutes()).padStart(2,'0');
+    const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+    const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    const dateStr = `${days[now.getDay()]}, ${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
+    const el = document.getElementById('liveClock');
+    if (el) el.textContent = `${hh}:${mm}  |  ${dateStr}`;
+  }
+  updateClock();
+  setInterval(updateClock, 1000);
+</script>
+{% block scripts %}{% endblock %}
+</body>
+</html>

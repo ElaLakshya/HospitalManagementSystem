@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block title %}Departments — Manipal Hospital{% endblock %}
+
+{% block content %}
+<div class="main-content">
+  <div class="page-title-bar">
+    <h1>🏥 Hospital Departments</h1>
+    <p>Browse all departments and their specialist doctors</p>
+  </div>
+
+  {% set icons = {
+    'Cardiology':       '❤️',
+    'Neurology':        '🧠',
+    'Orthopedics':      '🦴',
+    'Pediatrics':       '👶',
+    'Oncology':         '🎗️',
+    'Dermatology':      '🔬',
+    'General Medicine': '🩺',
+    'Emergency':        '🚨'
+  } %}
+
+  <div class="dept-grid">
+    {% for d in departments %}
+    <a href="{{ url_for('department_detail', dept_id=d.id) }}"
+       style="text-decoration:none;color:inherit;">
+      <div class="dept-card">
+        <div class="dept-icon">{{ icons.get(d.name, '🏥') }}</div>
+        <div class="dept-name">{{ d.name }}</div>
+        <div class="dept-desc">{{ d.description }}</div>
+        <div class="dept-meta">
+          📍 {{ d.floor or 'TBD' }} &nbsp;·&nbsp;
+          👨‍⚕️ {{ d.doctor_count }} doctor{{ 's' if d.doctor_count != 1 else '' }} &nbsp;·&nbsp;
+          ☎️ Ext. {{ d.phone_ext or 'N/A' }}
+        </div>
+      </div>
+    </a>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

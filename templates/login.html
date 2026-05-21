@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block title %}Login — Manipal Hospital{% endblock %}
+
+{% block content %}
+<div class="auth-page">
+  <div class="auth-box">
+    <h2>Welcome Back</h2>
+    <p class="auth-sub">Sign in to access your Manipal Hospital account</p>
+
+    <form method="POST">
+      <!-- User type toggle -->
+      <div class="type-toggle">
+        <button type="button" class="type-btn active" id="btnDoc"
+                onclick="setType('doctor')">🩺 Doctor</button>
+        <button type="button" class="type-btn"        id="btnPat"
+                onclick="setType('patient')">🧑‍⚕️ Patient</button>
+      </div>
+      <input type="hidden" name="user_type" id="userTypeInput" value="doctor">
+
+      <div class="form-group">
+        <label>Email Address</label>
+        <input class="form-control" type="email" name="email"
+               placeholder="you@email.com" required>
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input class="form-control" type="password" name="password"
+               placeholder="••••••••" required>
+      </div>
+
+      <button type="submit" class="btn btn-primary" style="width:100%;margin-top:8px;padding:13px;">
+        Login
+      </button>
+    </form>
+
+    <p style="text-align:center;margin-top:20px;font-size:.85rem;color:var(--text-mid);">
+      Don't have an account?
+      <a href="{{ url_for('signup') }}" style="color:var(--accent-dark);font-weight:600;">Sign up</a>
+    </p>
+    <p style="text-align:center;margin-top:6px;font-size:.82rem;">
+      <a href="{{ url_for('index') }}" style="color:var(--text-soft);">← Back to Home</a>
+    </p>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function setType(t) {
+  document.getElementById('userTypeInput').value = t;
+  document.getElementById('btnDoc').classList.toggle('active', t==='doctor');
+  document.getElementById('btnPat').classList.toggle('active', t==='patient');
+}
+</script>
+{% endblock %}

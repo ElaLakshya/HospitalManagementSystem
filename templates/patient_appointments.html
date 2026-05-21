@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block title %}My Appointments — Manipal Hospital{% endblock %}
+
+{% block content %}
+<div class="main-content">
+  <div class="page-title-bar" style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+    <div>
+      <h1>📋 My Appointments</h1>
+      <p>Your complete appointment history at Manipal Hospital</p>
+    </div>
+    <a href="{{ url_for('make_appointment') }}" class="btn btn-accent">➕ Book New</a>
+  </div>
+
+  <div class="card">
+    {% if appointments %}
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Doctor</th>
+            <th>Department</th>
+            <th>Date</th>
+            <th>Status</th>
+            <th>Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for a in appointments %}
+          <tr>
+            <td>{{ loop.index }}</td>
+            <td><strong>Dr. {{ a.doctor_name }}</strong></td>
+            <td>{{ a.dept_name }}</td>
+            <td>{{ a.date }}</td>
+            <td><span class="badge badge-{{ a.status }}">{{ a.status }}</span></td>
+            <td style="max-width:180px;white-space:normal;">{{ a.notes or '—' }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="empty-state">
+      <div class="empty-icon">📋</div>
+      <h3>No Appointments Yet</h3>
+      <p>Book your first appointment with one of our specialists.</p>
+      <a href="{{ url_for('make_appointment') }}"
+         class="btn btn-accent" style="margin-top:16px;">Book Now</a>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+{% block title %}Medicines Issued — Manipal Hospital{% endblock %}
+
+{% block content %}
+<div class="main-content">
+  <div class="page-title-bar" style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+    <div>
+      <h1>💊 Medicines Issued</h1>
+      <p>All prescriptions and medicines you have issued</p>
+    </div>
+    <button class="btn btn-accent" onclick="document.getElementById('addModal').classList.add('open')">
+      ＋ Add Record
+    </button>
+  </div>
+
+  <div class="card">
+    {% if medicines %}
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Patient</th>
+            <th>Medicine</th>
+            <th>Dosage</th>
+            <th>Date Issued</th>
+            <th>Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for m in medicines %}
+          <tr>
+            <td>{{ loop.index }}</td>
+            <td><strong>{{ m.patient_name }}</strong></td>
+            <td>{{ m.medicine_name }}</td>
+            <td>{{ m.dosage or '—' }}</td>
+            <td>{{ m.date_issued }}</td>
+            <td style="max-width:200px;white-space:normal;">{{ m.notes or '—' }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="empty-state">
+      <div class="empty-icon">💊</div>
+      <h3>No Records Yet</h3>
+      <p>Click "Add Record" to log a medicine prescription.</p>
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+<!-- ADD MEDICINE MODAL -->
+<div class="modal-overlay" id="addModal">
+  <div class="modal-box">
+    <h3>➕ Add Medicine Record</h3>
+    <form method="POST" action="{{ url_for('add_medicine') }}">
+      <div class="form-group">
+        <label>Patient</label>
+        <select class="form-control" name="patient_id" required>
+          <option value="">-- Select Patient --</option>
+          {% for p in patients %}
+          <option value="{{ p.id }}">{{ p.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Medicine Name</label>
+          <input class="form-control" type="text" name="medicine_name"
+                 placeholder="e.g. Metformin" required>
+        </div>
+        <div class="form-group">
+          <label>Dosage</label>
+          <input class="form-control" type="text" name="dosage"
+                 placeholder="e.g. 500mg twice daily">
+        </div>
+        <div class="form-group">
+          <label>Date Issued</label>
+          <input class="form-control" type="date" name="date_issued" required>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Notes (optional)</label>
+        <textarea class="form-control" name="notes" rows="2"
+                  placeholder="Any special instructions..."></textarea>
+      </div>
+      <div style="display:flex;gap:10px;margin-top:8px;">
+        <button type="submit" class="btn btn-primary" style="flex:1;">Save Record</button>
+        <button type="button" class="btn btn-outline"
+                onclick="document.getElementById('addModal').classList.remove('open')">
+          Cancel
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block title %}Patient Dashboard — Manipal Hospital{% endblock %}
+
+{% block content %}
+<div class="main-content">
+
+  <!-- Welcome Banner -->
+  {% if pat %}
+  <div class="welcome-banner">
+    <div class="wb-icon">🧑‍⚕️</div>
+    <div>
+      <div class="wb-title">Hello, {{ pat.name }}!</div>
+      <div class="wb-sub">
+        Blood Group: {{ pat.blood_group or 'N/A' }} &nbsp;·&nbsp;
+        DOB: {{ pat.dob or 'N/A' }} &nbsp;·&nbsp;
+        📞 {{ pat.phone or 'N/A' }}
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- Stats -->
+  <div class="stat-grid">
+    <div class="stat-card accent-card">
+      <div class="stat-icon">📅</div>
+      <div class="stat-value">{{ upcoming }}</div>
+      <div class="stat-label">Upcoming Appointments</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">📋</div>
+      <div class="stat-value">{{ total }}</div>
+      <div class="stat-label">Total Appointments</div>
+    </div>
+  </div>
+
+  <!-- Quick Links -->
+  <div class="page-title-bar">
+    <h1>Quick Actions</h1>
+  </div>
+  <div class="action-grid">
+    <a href="{{ url_for('patient_appointments') }}" class="action-card">
+      <div class="action-icon">📋</div>
+      <div class="action-title">Past Appointments</div>
+      <div class="action-desc">View your appointment history and status</div>
+    </a>
+    <a href="{{ url_for('make_appointment') }}" class="action-card">
+      <div class="action-icon">➕</div>
+      <div class="action-title">Book Appointment</div>
+      <div class="action-desc">Schedule a visit to a department or doctor</div>
+    </a>
+    <a href="{{ url_for('departments') }}" class="action-card">
+      <div class="action-icon">🏥</div>
+      <div class="action-title">Departments</div>
+      <div class="action-desc">Explore all departments and their doctors</div>
+    </a>
+  </div>
+
+</div>
+{% endblock %}
